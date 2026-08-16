@@ -134,6 +134,20 @@ dans un dépôt d'état est un mauvais signal.
 Tout nouveau secret doit être ajouté à la liste `secrets` de `.upptimerc.yml`. Cette liste est la
 liste blanche complète : un secret absent n'est pas transmis aux workflows.
 
+**Un secret absent, vide ou mal posé affiche le service comme mort.** La substitution laisse alors
+la chaîne littérale, Upptime la préfixe en `https://$NOM_DU_SECRET`, et la résolution DNS échoue.
+Le relevé porte `Could not resolve hostname`, une issue d'incident s'ouvre, et rien ne distingue ce
+cas d'une vraie panne. Poser un secret avec `gh secret set NOM --body -` produit exactement cela :
+la valeur devient le caractère `-`, car `--body` prend la valeur telle quelle et la lecture de
+l'entrée standard demande d'omettre le drapeau.
+
+```bash
+printf '%s' 'https://exemple' | gh secret set NOM --repo 2gather-nyxus/upptime
+```
+
+Après avoir posé ou changé un secret, déclencher `Uptime CI` à la main et vérifier que le service
+concerné remonte opérationnel, avant de laisser la mesure s'accumuler.
+
 ### Suivre les mises à jour
 
 Trois canaux, du plus immédiat au plus complet.
