@@ -92,17 +92,39 @@ dans un dépôt d'état est un mauvais signal.
 Tout nouveau secret doit être ajouté à la liste `secrets` de `.upptimerc.yml`. Cette liste est la
 liste blanche complète : un secret absent n'est pas transmis aux workflows.
 
-### Alertes
+### Suivre les mises à jour
 
-Une interruption assigne une issue, ce qui déclenche la notification GitHub habituelle par courriel.
-Pour une alerte temps réel, Upptime accepte Slack, Discord, Telegram et le webhook générique. Il faut
-poser les secrets du fournisseur, par exemple `NOTIFICATION_SLACK` à `true` et
+Trois canaux, du plus immédiat au plus complet.
+
+| Canal | Ce qu'il porte | Comment |
+| ----- | -------------- | ------- |
+| Notification GitHub | les incidents, par courriel | suivre ce dépôt, ou être dans `assignees` |
+| Flux Atom | chaque relevé, toutes les cinq minutes | [`commits/main.atom`](https://github.com/2gather-nyxus/upptime/commits/main.atom) |
+| Webhook temps réel | les incidents, poussés | secrets du fournisseur, voir ci-dessous |
+
+Le flux Atom est volumineux par construction : il porte un relevé toutes les cinq minutes, pas
+seulement les incidents. Pour une alerte poussée, Upptime accepte Slack, Discord, Telegram et le
+webhook générique. Poser les secrets du fournisseur, par exemple `NOTIFICATION_SLACK` à `true` et
 `NOTIFICATION_SLACK_WEBHOOK_URL`, puis ajouter ces deux noms à la liste `secrets`.
 
 ### Fenêtre de maintenance
 
 Ouvrir une issue depuis le modèle _Maintenance Event_ et renseigner `start`, `end` et `expectedDown`
-dans le commentaire du haut. La période est alors exclue du calcul de disponibilité.
+dans le commentaire du haut. La période est alors exclue du calcul de disponibilité, et la page de
+statut l'annonce avant qu'elle commence.
+
+### Passer sur un domaine propre
+
+La page est servie sur `2gather-nyxus.github.io/upptime`. Pour `status.2gather.events`, ajouter la
+clé `cname` sous `status-website` dans `.upptimerc.yml`, puis créer l'enregistrement DNS
+correspondant :
+
+```
+status  CNAME  2gather-nyxus.github.io
+```
+
+Poser le `cname` avant que le DNS ne résolve rend la page inaccessible dans l'intervalle, donc créer
+l'enregistrement d'abord. Penser à mettre à jour `og:url` dans `metaTags` au même moment.
 
 ## Licences
 
