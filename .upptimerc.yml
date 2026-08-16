@@ -1,0 +1,91 @@
+owner: 2gather-nyxus
+repo: upptime
+
+# Liste blanche explicite des secrets passes aux workflows. Sans cette cle,
+# Upptime bascule en mode automatique et expose un contexte de secrets bien
+# plus large que necessaire. Ajouter ici le nom de tout nouveau secret,
+# y compris les cles NOTIFICATION_* le jour ou une alerte temps reel est
+# branchee : quand `secrets` est present, c'est la liste complete.
+secrets:
+  - API_EVENTS_URL
+  - ADMIN_APP_URL
+  - ADMIN_EVENTS_URL
+  - ADMIN_ME_URL
+
+sites:
+  # Deux sondes sur l'API, et c'est deliberé. La premiere repond sans toucher
+  # ni la base ni le cache : elle reste verte quand PostgreSQL est tombe. La
+  # seconde lit reellement la base. Les deux ensemble distinguent un processus
+  # mort d'une base morte.
+  #
+  # Seule la sonde de vie affiche son adresse : elle ne rend qu'un statut et un
+  # horodatage. La sonde de lecture passe par un secret, parce que la publier
+  # reviendrait a indexer, depuis une page suivie par les robots, un point
+  # d'entree qui rend des donnees. Elle est bornee a un enregistrement : ce qui
+  # est verifie, c'est que la lecture aboutit, pas le volume rendu.
+  - name: API
+    url: https://api.2-gather.app/api/health
+    maxResponseTime: 2000
+    __dangerous__body_down_if_text_missing: '"status":"ok"'
+  - name: API, acces base de donnees
+    url: $API_EVENTS_URL
+    maxResponseTime: 2000
+    __dangerous__body_down_if_text_missing: "pagination"
+
+  - name: Application web evenements
+    url: https://2gather.events
+    maxResponseTime: 3000
+  - name: Application web profils
+    url: https://2gather.me
+    maxResponseTime: 3000
+
+  # Les trois panneaux d'administration sont surveilles par URL secrete.
+  # L'etat est public, l'adresse ne l'est pas : Upptime ecrit le nom du
+  # secret dans history/ et n'affiche aucun lien sur la page de statut.
+  - name: Administration, production
+    url: $ADMIN_APP_URL
+    maxResponseTime: 3000
+  - name: Administration, evenements
+    url: $ADMIN_EVENTS_URL
+    maxResponseTime: 3000
+  - name: Administration, profils
+    url: $ADMIN_ME_URL
+    maxResponseTime: 3000
+
+status-website:
+  baseUrl: /upptime
+  name: Etat des services 2gather
+  introTitle: Etat des services 2gather
+  introMessage: >-
+    Disponibilite des services 2gather, relevee toutes les cinq minutes depuis
+    les runners GitHub Actions. Chaque mesure est ajoutee a l'historique public
+    du depot. Une interruption ouvre une issue datee, close au retablissement.
+  navbar:
+    - title: Etat
+      href: /
+    - title: Historique
+      href: https://github.com/2gather-nyxus/upptime/commits/main
+
+# Seul `uptime` porte une contrainte reelle : c'est la frequence de mesure.
+# Les autres taches ne font que reconstruire des vues a partir de l'historique.
+# `updateTemplate` et `updates` sont declenches a la main, voir README.
+workflowSchedule:
+  graphs: "0 0 * * *"
+  responseTime: "0 23 * * *"
+  staticSite: "0 1 * * *"
+  summary: "0 */6 * * *"
+  updateTemplate: "0 0 * * *"
+  updates: "0 3 * * *"
+  uptime: "*/5 * * * *"
+
+# Par defaut Upptime supprime les issues d'incident refermees en moins de
+# quinze minutes. La plupart des pannes durent moins que ca : sans ce reglage,
+# l'historique des incidents perd precisement les cas les plus frequents.
+skipDeleteIssues: true
+
+assignees:
+  - Asteerix
+
+skipDescriptionUpdate: true
+skipTopicsUpdate: true
+skipHomepageUpdate: true
