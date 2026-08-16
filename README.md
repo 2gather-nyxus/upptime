@@ -36,14 +36,14 @@ l'API ci-dessus. Leur taux de sessions sans plantage se mesure avec un outil dis
 
 ## Comment lire les états
 
-- 🟩 **Up** : la sonde répond, dans le budget de temps de réponse.
-- 🟨 **Degraded** : la sonde répond mais dépasse `maxResponseTime`. Le seuil est fixé par service,
+- 🟩 **Opérationnel** : la sonde répond, dans le budget de temps de réponse.
+- 🟨 **Dégradé** : la sonde répond mais dépasse `maxResponseTime`. Le seuil est fixé par service,
   entre 2 s et 4 s, à environ trois fois la latence mesurée sur ce service depuis un runner. Un
   seuil unique aurait été soit aveugle sur les points d'entrée rapides, soit en dégradé permanent
   sur le plus lent. Ces valeurs reposent sur peu de relevés : elles seront à revoir après une
   semaine, contre les percentiles réels de `api/*/response-time-week.json`.
-- 🟥 **Down** : la sonde ne répond pas, renvoie un code d'erreur, ou rend un corps qui ne contient
-  pas le marqueur attendu.
+- 🟥 **Indisponible** : la sonde ne répond pas, renvoie un code d'erreur, ou rend un corps qui ne
+  contient pas le marqueur attendu.
 
 Une interruption ouvre une issue datée, assignée, close au rétablissement. `skipDeleteIssues` est
 activé : sans ce réglage Upptime supprime les issues refermées en moins de quinze minutes, ce qui

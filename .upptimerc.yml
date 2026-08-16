@@ -151,9 +151,13 @@ i18n:
   averageResponseTimeTitle: Temps de réponse moyen
   sevelDayResponseTime: Temps de réponse sur 7 jours
   responseTimeMs: Temps de réponse (ms)
-  up: Opérationnel
-  down: Indisponible
-  degraded: Dégradé
+  # Le carre de couleur fait partie de la valeur par defaut ("🟩 Up"), pas du
+  # gabarit. Traduire sans le remettre le supprime de la table du README, ou
+  # il est le seul indicateur d'etat de la ligne. Il est donc conserve ici, et
+  # le theme rend les pastilles de la page neutres pour ne pas le doubler.
+  up: 🟩 Opérationnel
+  degraded: 🟨 Dégradé
+  down: 🟥 Indisponible
   ms: ms
   loading: Chargement
   navGitHub: GitHub
@@ -198,6 +202,31 @@ i18n:
   rateLimitExceededGitHubPAT: Jeton d'accès personnel GitHub
   rateLimitExceededCopyPastePAT: Collez votre jeton ici
   rateLimitExceededSaveToken: Enregistrer le jeton
+
+  # Clés propres à la table générée du README. Elles ne figurent pas dans le
+  # i18n.yml amont, qui ne couvre que la page : sans elles les en-têtes de
+  # colonne et les textes alternatifs des badges restent en anglais.
+  #
+  # `liveStatusHtmlComment` est volontairement absente. Sa valeur par défaut
+  # est le marqueur `<!--live status-->` que le README contient : la traduire
+  # casserait le repère que le générateur vient remplacer.
+  url: URL
+  status: État
+  history: Historique
+  responseTime: Temps de réponse
+  responseTimeDay: Temps de réponse sur 24 h
+  responseTimeWeek: Temps de réponse sur 7 jours
+  responseTimeMonth: Temps de réponse sur 30 jours
+  responseTimeYear: Temps de réponse sur 1 an
+  responseTimeGraphAlt: Graphe du temps de réponse
+  uptime: Disponibilité
+  uptimeDay: Disponibilité sur 24 h
+  uptimeWeek: Disponibilité sur 7 jours
+  uptimeMonth: Disponibilité sur 30 jours
+  uptimeYear: Disponibilité sur 1 an
+  degradedPerformance: 🟨 Performances dégradées
+  partialOutage: 🟧 Panne partielle
+  completeOutage: 🟥 Panne totale
 
 # Seul `uptime` porte une contrainte réelle : c'est la fréquence de mesure.
 # Les autres tâches ne font que reconstruire des vues à partir de l'historique.
