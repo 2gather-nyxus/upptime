@@ -81,7 +81,12 @@ status-website:
   themeUrl: https://2gather-nyxus.github.io/upptime/2gather.css
 
   logoUrl: https://2gather.events/icon.png
-  favicon: https://2gather.events/favicon.ico
+
+  # _layout.svelte code en dur deux liens d'icône, l'un annoncé image/svg et
+  # l'autre image/png, tous deux alimentés par cette clé. Un PNG rend donc le
+  # second exact. Le premier restera mal typé tant que la marque n'aura pas de
+  # SVG : `faviconSvg` n'est pas posée plutôt que de pointer un PNG de plus.
+  favicon: https://2gather.events/icon.png
 
   navbar:
     - title: État
@@ -122,6 +127,7 @@ status-website:
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <link rel="alternate" type="application/atom+xml" title="Relevés de disponibilité 2gather" href="https://github.com/2gather-nyxus/upptime/commits/main.atom" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://2gather.events/apple-icon.png" />
 
 # La page de statut est écrite en anglais par défaut. Laisser des noms de
 # service français sous des libellés anglais est la première chose qui se voit.
