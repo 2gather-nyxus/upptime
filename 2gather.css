@@ -1,0 +1,46 @@
+/* Theme de la page de statut, aligne sur la charte 2gather.
+ *
+ * Palette relevee sur 2gather.events : creme #faf4e9 en fond, brun tres
+ * sombre #16100a pour le texte, jaune #ffcc00 en accent.
+ *
+ * Les trois couleurs d'etat restent vert, ambre et rouge plutot que la
+ * charte. Un etat de service se lit avant d'etre joli, et ces trois-la sont
+ * comprises sans legende. Elles sont seulement assombries pour passer le
+ * rapport de contraste 4.5:1 du texte blanc pose dessus, ce que l'ambre vif
+ * d'origine ne passait pas.
+ */
+
+:root {
+  --body-background-color: #faf4e9;
+  --body-text-color: #16100a;
+  --card-background-color: #ffffff;
+
+  --nav-background-color: #ffffff;
+  --nav-border-bottom-color: #e7ddc8;
+  --nav-current-border-bottom-color: #ffcc00;
+
+  --card-border-color: #e7ddc8;
+
+  --up-border-left-color: #1a7f4b;
+  --degraded-border-left-color: #d99400;
+  --down-border-left-color: #b02a1f;
+  --down-background-color: #fbecea;
+
+  --tag-color: #ffffff;
+  --tag-up-background-color: #1a7f4b;
+  --tag-degraded-background-color: #8a5a00;
+  --tag-down-background-color: #b02a1f;
+
+  --change-background-color: #ffcc00;
+
+  --error-button-border-color: #16100a;
+  --error-button-background-color: #16100a;
+  --error-button-color: #faf4e9;
+
+  --submit-button-border-color: #16100a;
+  --submit-button-background-color: #16100a;
+  --submit-button-color: #faf4e9;
+
+  --graph-opacity: 1;
+  --graph-filter: none;
+}
