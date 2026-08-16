@@ -67,6 +67,26 @@ ce que la documentation GitHub recommande explicitement pour réduire le retard.
 grille des relevés, toutes les tâches Upptime partageant un même groupe de concurrence où deux
 déclenchements simultanés se mettent en file.
 
+## Les workflows sont durcis à la main
+
+Les fichiers de `.github/workflows/` portent trois choses que les gabarits d'Upptime ne génèrent
+pas : un `timeout-minutes`, un bloc `permissions` au strict nécessaire, et des actions épinglées
+sur une version plutôt que sur `master`.
+
+Sans `timeout-minutes`, le défaut de GitHub est de six heures alors que ces tâches durent moins de
+deux minutes. Toutes partagent un groupe de concurrence en `cancel-in-progress: false`, donc un job
+bloqué met en file tous les relevés suivants : le moniteur deviendrait aveugle sans que rien ne le
+signale. Sans bloc `permissions`, chaque tâche reçoit le jeton par défaut du dépôt, en écriture sur
+toutes les portées.
+
+**`Update Template CI` annule ce durcissement.** Elle supprime puis régénère les huit fichiers
+depuis les gabarits amont, qui n'en portent rien. Les crons survivent, puisqu'ils sont relus depuis
+`workflowSchedule`. Le reste est perdu, et `setup.yml` réapparaît. Après l'avoir lancée, vérifier :
+
+```bash
+grep -L "timeout-minutes" .github/workflows/*.yml   # doit ne rien lister
+```
+
 Descendre réellement sous les cinq minutes suppose de sortir du planificateur de GitHub : un
 déclencheur externe appelant `repository_dispatch` avec le type `uptime`, depuis un ordonnanceur
 qui, lui, tient la cadence.
