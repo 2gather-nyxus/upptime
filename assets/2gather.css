@@ -26,10 +26,16 @@
   --down-border-left-color: #b02a1f;
   --down-background-color: #fbecea;
 
-  --tag-color: #ffffff;
-  --tag-up-background-color: #1a7f4b;
-  --tag-degraded-background-color: #8a5a00;
-  --tag-down-background-color: #b02a1f;
+  /* Pastilles en teinte claire, texte sombre, le carre de couleur du libelle
+   * portant le signal. Upptime partage la meme cle i18n entre la pastille de
+   * la page et la table du README, or le README n'a que ce carre pour se lire
+   * d'un coup d'oeil. Le garder imposait un carre vert sur un fond vert.
+   * Teinte claire plus carre est la forme retenue par GitHub et Linear, et
+   * elle passe 15:1 de contraste la ou du blanc sur vert plafonnait a 4.6. */
+  --tag-color: #16100a;
+  --tag-up-background-color: #dff0e6;
+  --tag-degraded-background-color: #fbeecd;
+  --tag-down-background-color: #fbdedb;
 
   --change-background-color: #ffcc00;
 
