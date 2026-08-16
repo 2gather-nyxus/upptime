@@ -17,6 +17,18 @@
 # ce que le jeton natif des Actions n'a pas le droit de faire. Elle exige un
 # secret GH_PAT a portee fine avec droit d'ecriture sur Contents et Workflows.
 # Planifiee, elle echouerait chaque nuit sans rien signaler de reel.
+#
+# AVERTISSEMENT. Cette tache supprime puis regenere les huit fichiers de ce
+# repertoire depuis les gabarits d'Upptime. Ces gabarits ne portent ni
+# `permissions` ni `timeout-minutes`, et epinglent deux actions sur `master`.
+# La lancer annule donc le durcissement de ce depot, sans rien signaler.
+#
+# Ce qui survit : les crons, relus depuis workflowSchedule dans .upptimerc.yml.
+# Ce qui est perdu : les blocs permissions, les timeout-minutes, les references
+# epinglees, et la suppression de setup.yml qui reviendra.
+#
+# Apres l'avoir lancee, rejouer le durcissement et verifier avec :
+#   grep -L "timeout-minutes" .github/workflows/*.yml
 name: Update Template CI
 on:
   repository_dispatch:
