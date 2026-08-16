@@ -1,80 +1,90 @@
 owner: 2gather-nyxus
 repo: upptime
 
-# Liste blanche explicite des secrets passes aux workflows. Sans cette cle,
+# Liste blanche explicite des secrets passés aux workflows. Sans cette clé,
 # Upptime bascule en mode automatique et expose un contexte de secrets bien
-# plus large que necessaire. Ajouter ici le nom de tout nouveau secret,
-# y compris les cles NOTIFICATION_* le jour ou une alerte temps reel est
-# branchee : quand `secrets` est present, c'est la liste complete.
+# plus large que nécessaire. Ajouter ici le nom de tout nouveau secret,
+# y compris les clés NOTIFICATION_* le jour où une alerte temps réel est
+# branchée : quand `secrets` est présent, c'est la liste complète.
 secrets:
   - API_EVENTS_URL
   - ADMIN_APP_URL
   - ADMIN_EVENTS_URL
   - ADMIN_ME_URL
 
+# Chaque service porte un `slug` explicite. Sans lui, l'identifiant est dérivé
+# du nom affiché, et renommer un service renomme son fichier d'historique, donc
+# perd sa disponibilité passée. Le nom devient libre, la mesure reste continue.
 sites:
-  # Deux sondes sur l'API, et c'est deliberé. La premiere repond sans toucher
-  # ni la base ni le cache : elle reste verte quand PostgreSQL est tombe. La
-  # seconde lit reellement la base. Les deux ensemble distinguent un processus
+  # Deux sondes sur l'API, et c'est délibéré. La première répond sans toucher
+  # ni la base ni le cache : elle reste verte quand PostgreSQL est tombé. La
+  # seconde lit réellement la base. Les deux ensemble distinguent un processus
   # mort d'une base morte.
   #
   # Seule la sonde de vie affiche son adresse : elle ne rend qu'un statut et un
   # horodatage. La sonde de lecture passe par un secret, parce que la publier
-  # reviendrait a indexer, depuis une page suivie par les robots, un point
-  # d'entree qui rend des donnees. Elle est bornee a un enregistrement : ce qui
-  # est verifie, c'est que la lecture aboutit, pas le volume rendu.
+  # reviendrait à indexer, depuis une page suivie par les robots, un point
+  # d'entrée qui rend des données. Elle est bornée à un enregistrement : ce qui
+  # est vérifié, c'est que la lecture aboutit, pas le volume rendu.
   - name: API
+    slug: api
     url: https://api.2-gather.app/api/health
     maxResponseTime: 2000
     __dangerous__body_down_if_text_missing: '"status":"ok"'
-  - name: API, acces base de donnees
+  - name: API, accès base de données
+    slug: api-acces-base-de-donnees
     url: $API_EVENTS_URL
     maxResponseTime: 2000
     __dangerous__body_down_if_text_missing: "pagination"
 
-  - name: Application web evenements
+  - name: Application web événements
+    slug: application-web-evenements
     url: https://2gather.events
     maxResponseTime: 3000
   - name: Application web profils
+    slug: application-web-profils
     url: https://2gather.me
     maxResponseTime: 3000
 
-  # Les trois consoles d'administration sont surveillees par URL secrete.
-  # L'etat est public, l'adresse ne l'est pas : Upptime ecrit le nom du
+  # Les trois consoles d'administration sont surveillées par URL secrète.
+  # L'état est public, l'adresse ne l'est pas : Upptime écrit le nom du
   # secret dans history/ et n'affiche aucun lien sur la page de statut.
   #
-  # Le seuil de la console evenements est plus large que les autres parce que
+  # Le seuil de la console événements est plus large que les autres parce que
   # le chemin runner vers origine y est mesurablement plus lent, 1605 et
-  # 2270 ms releves contre 490 a 590 ms ailleurs. Lui appliquer le seuil
-  # commun produirait un degrade permanent qui ne signalerait rien.
+  # 2270 ms relevés contre 438 à 648 ms ailleurs. Lui appliquer le seuil
+  # commun produirait un dégradé permanent qui ne signalerait rien.
   - name: Administration, production
+    slug: administration-production
     url: $ADMIN_APP_URL
     maxResponseTime: 2000
-  - name: Administration, evenements
+  - name: Administration, événements
+    slug: administration-evenements
     url: $ADMIN_EVENTS_URL
     maxResponseTime: 4000
   - name: Administration, profils
+    slug: administration-profils
     url: $ADMIN_ME_URL
     maxResponseTime: 2000
 
 status-website:
   baseUrl: /upptime
-  name: Etat des services 2gather
-  introTitle: Etat des services 2gather
+  name: État des services 2gather
+  introTitle: État des services 2gather
   introMessage: >-
-    Disponibilite des services 2gather, relevee toutes les cinq minutes depuis
-    les runners GitHub Actions. Chaque mesure est ajoutee a l'historique public
-    du depot. Une interruption ouvre une issue datee, close au retablissement.
+    Disponibilité des services 2gather, relevée toutes les cinq minutes depuis
+    les runners GitHub Actions. Chaque mesure est ajoutée à l'historique public
+    du dépôt. Une interruption ouvre une issue datée, close au rétablissement.
 
-  # Theme aux couleurs de la marque, servi depuis assets/. Tout fichier de ce
-  # repertoire est publie tel quel a la racine du site.
+  # Thème aux couleurs de la marque, servi depuis assets/. Tout fichier de ce
+  # répertoire est publié tel quel à la racine du site.
   themeUrl: https://2gather-nyxus.github.io/upptime/2gather.css
 
   logoUrl: https://2gather.events/icon.png
   favicon: https://2gather.events/favicon.ico
 
   navbar:
-    - title: Etat
+    - title: État
       href: /
     - title: Historique des relevés
       href: https://github.com/2gather-nyxus/upptime/commits/main
@@ -83,106 +93,115 @@ status-website:
     - title: 2gather.me
       href: https://2gather.me
 
-  # Sans ces balises, un lien partage vers la page de statut s'affiche nu.
-  # C'est le seul endroit ou la page est vue par quelqu'un qui ne l'a pas
-  # demandee, donc c'est celui qui compte le plus.
+  # `metaTags` ne rend que l'attribut `name` : _layout.svelte écrit
+  # `<meta name={link.name}>` et ignore tout le reste. Open Graph exige
+  # `property`, donc ces balises-là passent par customHeadHtml, seul chemin
+  # qui laisse écrire le HTML tel quel. Sans elles, un lien partagé vers la
+  # page s'affiche nu, et c'est la seule situation où elle est vue par
+  # quelqu'un qui ne l'a pas demandée.
   metaTags:
     - name: description
-      content: Etat en temps reel des services 2gather, releve toutes les cinq minutes.
-    - name: theme-color
-      content: "#faf4e9"
-    - property: "og:title"
-      content: Etat des services 2gather
-    - property: "og:description"
-      content: Etat en temps reel des services 2gather, releve toutes les cinq minutes.
-    - property: "og:type"
-      content: website
-    - property: "og:url"
-      content: https://2gather-nyxus.github.io/upptime/
-    - property: "og:image"
-      content: https://2gather.events/2gather/og.png
+      content: État en temps réel des services 2gather, relevé toutes les cinq minutes.
     - name: "twitter:card"
       content: summary_large_image
+    - name: "twitter:title"
+      content: État des services 2gather
+    - name: "twitter:description"
+      content: État en temps réel des services 2gather, relevé toutes les cinq minutes.
+    - name: "twitter:image"
+      content: https://2gather.events/2gather/og.png
 
-# La page de statut est ecrite en anglais par defaut. Laisser des noms de
-# service francais sous des libelles anglais est la premiere chose qui se voit.
+  customHeadHtml: >-
+    <meta property="og:site_name" content="2gather" />
+    <meta property="og:title" content="État des services 2gather" />
+    <meta property="og:description" content="État en temps réel des services 2gather, relevé toutes les cinq minutes." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://2gather-nyxus.github.io/upptime/" />
+    <meta property="og:image" content="https://2gather.events/2gather/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <link rel="alternate" type="application/atom+xml" title="Relevés de disponibilité 2gather" href="https://github.com/2gather-nyxus/upptime/commits/main.atom" />
+
+# La page de statut est écrite en anglais par défaut. Laisser des noms de
+# service français sous des libellés anglais est la première chose qui se voit.
 # `locale` ne fait pas que traduire : il gouverne le format des dates.
-# Ces cles servent aussi a la table generee dans le README.
+# Ces clés servent aussi à la table générée dans le README.
 i18n:
   locale: fr-FR
   activeIncidents: Incidents en cours
-  allSystemsOperational: Tous les services sont operationnels
+  allSystemsOperational: Tous les services sont opérationnels
   incidentReport: "Voir le rapport de l'incident $NUMBER"
   activeIncidentSummary: "Ouvert le $DATE, $POSTS message(s)"
-  incidentTitle: Detail de l'incident $NUMBER
-  incidentDetails: Detail de l'incident
-  incidentFixed: Resolu
+  incidentTitle: Détail de l'incident $NUMBER
+  incidentDetails: Détail de l'incident
+  incidentFixed: Résolu
   incidentOngoing: En cours
   incidentOpenedAt: Ouvert le
   incidentClosedAt: Clos le
   incidentViewOnGitHub: Consulter et suivre sur GitHub
-  incidentCommentSummary: Publie le $DATE par $AUTHOR
-  incidentBack: Retour a tous les incidents
-  pastIncidents: Incidents passes
-  pastIncidentsResolved: "Resolu en $MINUTES minutes, $POSTS message(s)"
-  liveStatus: Etat en direct
-  overallUptime: "Disponibilite globale : $UPTIME"
-  overallUptimeTitle: Disponibilite globale
-  averageResponseTime: "Temps de reponse moyen : $TIME ms"
-  averageResponseTimeTitle: Temps de reponse moyen
-  sevelDayResponseTime: Temps de reponse sur 7 jours
-  responseTimeMs: Temps de reponse (ms)
-  up: Operationnel
+  incidentCommentSummary: Publié le $DATE par $AUTHOR
+  incidentBack: Retour à tous les incidents
+  pastIncidents: Incidents passés
+  pastIncidentsResolved: "Résolu en $MINUTES minutes, $POSTS message(s)"
+  liveStatus: État en direct
+  overallUptime: "Disponibilité globale : $UPTIME"
+  overallUptimeTitle: Disponibilité globale
+  averageResponseTime: "Temps de réponse moyen : $TIME ms"
+  averageResponseTimeTitle: Temps de réponse moyen
+  sevelDayResponseTime: Temps de réponse sur 7 jours
+  responseTimeMs: Temps de réponse (ms)
+  up: Opérationnel
   down: Indisponible
-  degraded: Degrade
+  degraded: Dégradé
   ms: ms
   loading: Chargement
   navGitHub: GitHub
-  footer: Cette page est [open source]($REPO), propulsee par [Upptime](https://upptime.js.org)
-  pastScheduledMaintenance: Maintenances passees
-  scheduledMaintenance: Maintenance planifiee
-  scheduledMaintenanceSummaryStarted: "Commencee le $DATE, duree $DURATION minutes"
-  scheduledMaintenanceSummaryStarts: "Commence le $DATE, duree $DURATION minutes"
-  startedAt: Commencee le
+  footer: Cette page est [open source]($REPO), propulsée par [Upptime](https://upptime.js.org)
+  pastScheduledMaintenance: Maintenances passées
+  scheduledMaintenance: Maintenance planifiée
+  scheduledMaintenanceSummaryStarted: "Commencée le $DATE, durée $DURATION minutes"
+  scheduledMaintenanceSummaryStarts: "Commence le $DATE, durée $DURATION minutes"
+  startedAt: Commencée le
   startsAt: Commence le
-  duration: Duree
+  duration: Durée
   durationMin: $DURATION minutes
-  incidentCompleted: Terminee
-  incidentScheduled: Planifiee
+  incidentCompleted: Terminée
+  incidentScheduled: Planifiée
   duration24H: 24 h
   duration7D: 7 j
   duration30D: 30 j
   duration1Y: 1 an
   durationAll: tout
   errorTitle: Une erreur est survenue
-  errorIntro: Impossible de recuperer l'etat le plus recent des services.
-  errorText: Reessayez dans quelques instants.
-  errorHome: Revenir a l'accueil
-  rateLimitExceededTitle: Limite de requetes atteinte
+  errorIntro: Impossible de récupérer l'état le plus récent des services.
+  errorText: Réessayez dans quelques instants.
+  errorHome: Revenir à l'accueil
+  rateLimitExceededTitle: Limite de requêtes atteinte
   rateLimitExceededIntro: >-
-    Vous avez depasse le nombre de requetes autorisees par heure. Attendez avant
-    de consulter cette page a nouveau, ou ajoutez un jeton d'acces personnel
+    Vous avez dépassé le nombre de requêtes autorisées par heure. Attendez avant
+    de consulter cette page à nouveau, ou ajoutez un jeton d'accès personnel
     GitHub pour continuer.
   rateLimitExceededWhatDoesErrorMean: Que signifie cette erreur ?
   rateLimitExceededErrorMeaning: >-
-    Cette page interroge l'API GitHub pour afficher l'etat des services en temps
-    reel. GitHub autorise 60 requetes par heure et par adresse IP, et ce quota
-    est epuise.
-  rateLimitExceededErrorHowCanFix: Comment y remedier ?
+    Cette page interroge l'API GitHub pour afficher l'état des services en temps
+    réel. GitHub autorise 60 requêtes par heure et par adresse IP, et ce quota
+    est épuisé.
+  rateLimitExceededErrorHowCanFix: Comment y remédier ?
   rateLimitExceededErrorFix: >-
-    Le quota de votre adresse IP se retablit au bout d'une heure. Vous pouvez
-    aussi renseigner un jeton d'acces personnel GitHub, qui porte la limite a
-    5 000 requetes par heure.
-  rateLimitExceededGeneratePAT: Comment generer un jeton d'acces personnel
-  rateLimitExceededHasSet: Un jeton d'acces personnel est enregistre.
+    Le quota de votre adresse IP se rétablit au bout d'une heure. Vous pouvez
+    aussi renseigner un jeton d'accès personnel GitHub, qui porte la limite à
+    5 000 requêtes par heure.
+  rateLimitExceededGeneratePAT: Comment générer un jeton d'accès personnel
+  rateLimitExceededHasSet: Un jeton d'accès personnel est enregistré.
   rateLimitExceededRemoveToken: Retirer le jeton
-  rateLimitExceededGitHubPAT: Jeton d'acces personnel GitHub
+  rateLimitExceededGitHubPAT: Jeton d'accès personnel GitHub
   rateLimitExceededCopyPastePAT: Collez votre jeton ici
   rateLimitExceededSaveToken: Enregistrer le jeton
 
-# Seul `uptime` porte une contrainte reelle : c'est la frequence de mesure.
-# Les autres taches ne font que reconstruire des vues a partir de l'historique.
-# `updateTemplate` et `updates` sont declenches a la main, voir README.
+# Seul `uptime` porte une contrainte réelle : c'est la fréquence de mesure.
+# Les autres tâches ne font que reconstruire des vues à partir de l'historique.
+# `updateTemplate` et `updates` sont déclenchés à la main, voir README.
 workflowSchedule:
   graphs: "0 0 * * *"
   responseTime: "0 23 * * *"
@@ -192,9 +211,9 @@ workflowSchedule:
   updates: "0 3 * * *"
   uptime: "*/5 * * * *"
 
-# Par defaut Upptime supprime les issues d'incident refermees en moins de
-# quinze minutes. La plupart des pannes durent moins que ca : sans ce reglage,
-# l'historique des incidents perd precisement les cas les plus frequents.
+# Par défaut Upptime supprime les issues d'incident refermées en moins de
+# quinze minutes. La plupart des pannes durent moins que ça : sans ce réglage,
+# l'historique des incidents perd précisément les cas les plus fréquents.
 skipDeleteIssues: true
 
 assignees:
