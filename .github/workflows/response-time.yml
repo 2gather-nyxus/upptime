@@ -17,17 +17,20 @@
 name: Response Time CI
 on:
   schedule:
-    - cron: "0 23 * * *"
+    - cron: "23 23 * * *"
   repository_dispatch:
     types: [response_time]
   workflow_dispatch:
 concurrency:
   group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
   cancel-in-progress: false
+permissions:
+  contents: write
 jobs:
   release:
     name: Check status
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v6

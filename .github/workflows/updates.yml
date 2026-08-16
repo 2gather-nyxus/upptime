@@ -23,10 +23,13 @@ on:
 concurrency:
   group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
   cancel-in-progress: false
+permissions:
+  contents: write
 jobs:
   release:
     name: Deploy updates
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -34,6 +37,6 @@ jobs:
           ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ secrets.GH_PAT || github.token }}
       - name: Update code
-        uses: upptime/updates@master
+        uses: upptime/updates@v1.0.1
         env:
           GH_PAT: ${{ secrets.GH_PAT || github.token }}

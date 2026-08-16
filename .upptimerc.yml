@@ -71,10 +71,17 @@ status-website:
   baseUrl: /upptime
   name: État des services 2gather
   introTitle: État des services 2gather
+  # La cadence annoncée est celle qui est mesurée, pas celle qui est demandée.
+  # Le cron réclame cinq minutes, GitHub retarde les tâches planifiées sous
+  # charge et la médiane relevée est de vingt-quatre minutes. Annoncer cinq
+  # minutes sur une page de statut serait faux, et faux sur le seul chiffre
+  # qui borne le délai de détection.
   introMessage: >-
-    Disponibilité des services 2gather, relevée toutes les cinq minutes depuis
-    les runners GitHub Actions. Chaque mesure est ajoutée à l'historique public
-    du dépôt. Une interruption ouvre une issue datée, close au rétablissement.
+    Disponibilité des services 2gather, mesurée depuis les runners GitHub
+    Actions, donc hors de l'infrastructure surveillée. Le relevé est demandé
+    toutes les cinq minutes et GitHub le livre en pratique toutes les vingt
+    minutes environ. Chaque mesure est ajoutée à l'historique public du dépôt,
+    et une interruption ouvre une issue datée, close au rétablissement.
 
   # Thème aux couleurs de la marque, servi depuis assets/. Tout fichier de ce
   # répertoire est publié tel quel à la racine du site.
@@ -106,20 +113,20 @@ status-website:
   # quelqu'un qui ne l'a pas demandée.
   metaTags:
     - name: description
-      content: État en temps réel des services 2gather, relevé toutes les cinq minutes.
+      content: État en temps réel des services 2gather, mesuré hors de leur infrastructure.
     - name: "twitter:card"
       content: summary_large_image
     - name: "twitter:title"
       content: État des services 2gather
     - name: "twitter:description"
-      content: État en temps réel des services 2gather, relevé toutes les cinq minutes.
+      content: État en temps réel des services 2gather, mesuré hors de leur infrastructure.
     - name: "twitter:image"
       content: https://2gather.events/2gather/og.png
 
   customHeadHtml: >-
     <meta property="og:site_name" content="2gather" />
     <meta property="og:title" content="État des services 2gather" />
-    <meta property="og:description" content="État en temps réel des services 2gather, relevé toutes les cinq minutes." />
+    <meta property="og:description" content="État en temps réel des services 2gather, mesuré hors de leur infrastructure." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:url" content="https://2gather-nyxus.github.io/upptime/" />
@@ -238,13 +245,13 @@ i18n:
 # Les autres tâches ne font que reconstruire des vues à partir de l'historique.
 # `updateTemplate` et `updates` sont déclenchés à la main, voir README.
 workflowSchedule:
-  graphs: "0 0 * * *"
-  responseTime: "0 23 * * *"
-  staticSite: "0 1 * * *"
-  summary: "0 */6 * * *"
+  graphs: "15 0 * * *"
+  responseTime: "23 23 * * *"
+  staticSite: "35 1 * * *"
+  summary: "43 */6 * * *"
   updateTemplate: "0 0 * * *"
   updates: "0 3 * * *"
-  uptime: "*/5 * * * *"
+  uptime: "2-59/5 * * * *"
 
 # Par défaut Upptime supprime les issues d'incident refermées en moins de
 # quinze minutes. La plupart des pannes durent moins que ça : sans ce réglage,

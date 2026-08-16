@@ -17,17 +17,21 @@
 name: Summary CI
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "43 */6 * * *"
   repository_dispatch:
     types: [summary]
   workflow_dispatch:
 concurrency:
   group: ${{ github.repository }}-${{ github.head_ref || github.ref_name }}-upptime
   cancel-in-progress: false
+permissions:
+  contents: write
+  issues: read
 jobs:
   release:
     name: Generate README
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v6
