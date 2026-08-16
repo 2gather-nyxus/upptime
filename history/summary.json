@@ -18,7 +18,7 @@
     "dailyMinutesDown": {}
   },
   {
-    "name": "API, acces base de donnees",
+    "name": "API, accès base de données",
     "url": "$API_EVENTS_URL",
     "icon": "https://icons.duckduckgo.com/ip3/null.ico",
     "slug": "api-acces-base-de-donnees",
@@ -36,7 +36,7 @@
     "dailyMinutesDown": {}
   },
   {
-    "name": "Application web evenements",
+    "name": "Application web événements",
     "url": "https://2gather.events",
     "icon": "https://icons.duckduckgo.com/ip3/2gather.events.ico",
     "slug": "application-web-evenements",
@@ -90,7 +90,7 @@
     "dailyMinutesDown": {}
   },
   {
-    "name": "Administration, evenements",
+    "name": "Administration, événements",
     "url": "$ADMIN_EVENTS_URL",
     "icon": "https://icons.duckduckgo.com/ip3/null.ico",
     "slug": "administration-evenements",
