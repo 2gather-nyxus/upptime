@@ -65,11 +65,120 @@ status-website:
     Disponibilite des services 2gather, relevee toutes les cinq minutes depuis
     les runners GitHub Actions. Chaque mesure est ajoutee a l'historique public
     du depot. Une interruption ouvre une issue datee, close au retablissement.
+
+  # Theme aux couleurs de la marque, servi depuis assets/. Tout fichier de ce
+  # repertoire est publie tel quel a la racine du site.
+  themeUrl: https://2gather-nyxus.github.io/upptime/2gather.css
+
+  logoUrl: https://2gather.events/icon.png
+  favicon: https://2gather.events/favicon.ico
+
   navbar:
     - title: Etat
       href: /
-    - title: Historique
+    - title: Historique des relevés
       href: https://github.com/2gather-nyxus/upptime/commits/main
+    - title: 2gather.events
+      href: https://2gather.events
+    - title: 2gather.me
+      href: https://2gather.me
+
+  # Sans ces balises, un lien partage vers la page de statut s'affiche nu.
+  # C'est le seul endroit ou la page est vue par quelqu'un qui ne l'a pas
+  # demandee, donc c'est celui qui compte le plus.
+  metaTags:
+    - name: description
+      content: Etat en temps reel des services 2gather, releve toutes les cinq minutes.
+    - name: theme-color
+      content: "#faf4e9"
+    - property: "og:title"
+      content: Etat des services 2gather
+    - property: "og:description"
+      content: Etat en temps reel des services 2gather, releve toutes les cinq minutes.
+    - property: "og:type"
+      content: website
+    - property: "og:url"
+      content: https://2gather-nyxus.github.io/upptime/
+    - property: "og:image"
+      content: https://2gather.events/2gather/og.png
+    - name: "twitter:card"
+      content: summary_large_image
+
+# La page de statut est ecrite en anglais par defaut. Laisser des noms de
+# service francais sous des libelles anglais est la premiere chose qui se voit.
+# `locale` ne fait pas que traduire : il gouverne le format des dates.
+# Ces cles servent aussi a la table generee dans le README.
+i18n:
+  locale: fr-FR
+  activeIncidents: Incidents en cours
+  allSystemsOperational: Tous les services sont operationnels
+  incidentReport: "Voir le rapport de l'incident $NUMBER"
+  activeIncidentSummary: "Ouvert le $DATE, $POSTS message(s)"
+  incidentTitle: Detail de l'incident $NUMBER
+  incidentDetails: Detail de l'incident
+  incidentFixed: Resolu
+  incidentOngoing: En cours
+  incidentOpenedAt: Ouvert le
+  incidentClosedAt: Clos le
+  incidentViewOnGitHub: Consulter et suivre sur GitHub
+  incidentCommentSummary: Publie le $DATE par $AUTHOR
+  incidentBack: Retour a tous les incidents
+  pastIncidents: Incidents passes
+  pastIncidentsResolved: "Resolu en $MINUTES minutes, $POSTS message(s)"
+  liveStatus: Etat en direct
+  overallUptime: "Disponibilite globale : $UPTIME"
+  overallUptimeTitle: Disponibilite globale
+  averageResponseTime: "Temps de reponse moyen : $TIME ms"
+  averageResponseTimeTitle: Temps de reponse moyen
+  sevelDayResponseTime: Temps de reponse sur 7 jours
+  responseTimeMs: Temps de reponse (ms)
+  up: Operationnel
+  down: Indisponible
+  degraded: Degrade
+  ms: ms
+  loading: Chargement
+  navGitHub: GitHub
+  footer: Cette page est [open source]($REPO), propulsee par [Upptime](https://upptime.js.org)
+  pastScheduledMaintenance: Maintenances passees
+  scheduledMaintenance: Maintenance planifiee
+  scheduledMaintenanceSummaryStarted: "Commencee le $DATE, duree $DURATION minutes"
+  scheduledMaintenanceSummaryStarts: "Commence le $DATE, duree $DURATION minutes"
+  startedAt: Commencee le
+  startsAt: Commence le
+  duration: Duree
+  durationMin: $DURATION minutes
+  incidentCompleted: Terminee
+  incidentScheduled: Planifiee
+  duration24H: 24 h
+  duration7D: 7 j
+  duration30D: 30 j
+  duration1Y: 1 an
+  durationAll: tout
+  errorTitle: Une erreur est survenue
+  errorIntro: Impossible de recuperer l'etat le plus recent des services.
+  errorText: Reessayez dans quelques instants.
+  errorHome: Revenir a l'accueil
+  rateLimitExceededTitle: Limite de requetes atteinte
+  rateLimitExceededIntro: >-
+    Vous avez depasse le nombre de requetes autorisees par heure. Attendez avant
+    de consulter cette page a nouveau, ou ajoutez un jeton d'acces personnel
+    GitHub pour continuer.
+  rateLimitExceededWhatDoesErrorMean: Que signifie cette erreur ?
+  rateLimitExceededErrorMeaning: >-
+    Cette page interroge l'API GitHub pour afficher l'etat des services en temps
+    reel. GitHub autorise 60 requetes par heure et par adresse IP, et ce quota
+    est epuise.
+  rateLimitExceededErrorHowCanFix: Comment y remedier ?
+  rateLimitExceededErrorFix: >-
+    Le quota de votre adresse IP se retablit au bout d'une heure. Vous pouvez
+    aussi renseigner un jeton d'acces personnel GitHub, qui porte la limite a
+    5 000 requetes par heure.
+  rateLimitExceededGeneratePAT: Comment generer un jeton d'acces personnel
+  rateLimitExceededHasSet: Un jeton d'acces personnel est enregistre.
+  rateLimitExceededRemoveToken: Retirer le jeton
+  rateLimitExceededGitHubPAT: Jeton d'acces personnel GitHub
+  rateLimitExceededCopyPastePAT: Collez votre jeton ici
+  rateLimitExceededSaveToken: Enregistrer le jeton
 
 # Seul `uptime` porte une contrainte reelle : c'est la frequence de mesure.
 # Les autres taches ne font que reconstruire des vues a partir de l'historique.
