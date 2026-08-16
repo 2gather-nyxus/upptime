@@ -39,18 +39,23 @@ sites:
     url: https://2gather.me
     maxResponseTime: 3000
 
-  # Les trois panneaux d'administration sont surveilles par URL secrete.
+  # Les trois consoles d'administration sont surveillees par URL secrete.
   # L'etat est public, l'adresse ne l'est pas : Upptime ecrit le nom du
   # secret dans history/ et n'affiche aucun lien sur la page de statut.
+  #
+  # Le seuil de la console evenements est plus large que les autres parce que
+  # le chemin runner vers origine y est mesurablement plus lent, 1605 et
+  # 2270 ms releves contre 490 a 590 ms ailleurs. Lui appliquer le seuil
+  # commun produirait un degrade permanent qui ne signalerait rien.
   - name: Administration, production
     url: $ADMIN_APP_URL
-    maxResponseTime: 3000
+    maxResponseTime: 2000
   - name: Administration, evenements
     url: $ADMIN_EVENTS_URL
-    maxResponseTime: 3000
+    maxResponseTime: 4000
   - name: Administration, profils
     url: $ADMIN_ME_URL
-    maxResponseTime: 3000
+    maxResponseTime: 2000
 
 status-website:
   baseUrl: /upptime
