@@ -145,6 +145,13 @@ status-website:
     - name: "twitter:image"
       content: https://2gather.events/2gather/og.png
 
+  # Sans cette clé, /robots.txt renvoie la page entière en 404, soit huit kilo-
+  # octets de HTML là où trois lignes suffisent. Une page de statut a vocation
+  # à être trouvée, donc tout est autorisé, explicitement plutôt que par défaut.
+  robotsText: |
+    User-agent: *
+    Allow: /
+
   customHeadHtml: >-
     <meta property="og:site_name" content="2gather" />
     <meta property="og:title" content="État des services 2gather" />

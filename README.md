@@ -126,9 +126,10 @@ grep -L "timeout-minutes" .github/workflows/*.yml   # doit ne rien lister
 
 ## Exploitation
 
-Cinq workflows tournent seuls : `Uptime CI` toutes les cinq minutes, puis `Response Time CI`,
-`Graphs CI`, `Static Site CI` et `Summary CI` qui reconstruisent des vues à partir de l'historique.
-Le dépôt est public, donc les minutes GitHub Actions ne sont pas décomptées du quota.
+Cinq workflows tournent seuls. `Uptime CI` relève l'état, aussi souvent que GitHub le lui accorde,
+voir plus haut. `Response Time CI`, `Graphs CI`, `Static Site CI` et `Summary CI` reconstruisent des
+vues à partir de l'historique, chacun une à quatre fois par jour. Le dépôt est public, donc les
+minutes GitHub Actions ne sont pas décomptées du quota.
 
 `Update Template CI` et `Updates CI` ne sont pas planifiés, ils se déclenchent à la main. Ces deux
 tâches réécrivent des fichiers de workflow, ce que le jeton natif des Actions n'a pas le droit de
@@ -167,14 +168,14 @@ concerné remonte opérationnel, avant de laisser la mesure s'accumuler.
 
 Trois canaux, du plus immédiat au plus complet.
 
-| Canal               | Ce qu'il porte                         | Comment                                                                           |
-| ------------------- | -------------------------------------- | --------------------------------------------------------------------------------- |
-| Notification GitHub | les incidents, par courriel            | suivre ce dépôt, ou être dans `assignees`                                         |
-| Flux Atom           | chaque relevé, toutes les cinq minutes | [`commits/main.atom`](https://github.com/2gather-nyxus/upptime/commits/main.atom) |
-| Webhook temps réel  | les incidents, poussés                 | secrets du fournisseur, voir ci-dessous                                           |
+| Canal               | Ce qu'il porte              | Comment                                                                           |
+| ------------------- | --------------------------- | --------------------------------------------------------------------------------- |
+| Notification GitHub | les incidents, par courriel | suivre ce dépôt, ou être dans `assignees`                                         |
+| Flux Atom           | chaque relevé               | [`commits/main.atom`](https://github.com/2gather-nyxus/upptime/commits/main.atom) |
+| Webhook temps réel  | les incidents, poussés      | secrets du fournisseur, voir ci-dessous                                           |
 
-Le flux Atom est volumineux par construction : il porte un relevé toutes les cinq minutes, pas
-seulement les incidents. Pour une alerte poussée, Upptime accepte Slack, Discord, Telegram et le
+Le flux Atom est volumineux par construction : il porte chaque relevé, pas seulement les incidents.
+Pour une alerte poussée, Upptime accepte Slack, Discord, Telegram et le
 webhook générique. Poser les secrets du fournisseur, par exemple `NOTIFICATION_SLACK` à `true` et
 `NOTIFICATION_SLACK_WEBHOOK_URL`, puis ajouter ces deux noms à la liste `secrets`.
 
