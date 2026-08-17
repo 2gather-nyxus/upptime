@@ -95,15 +95,18 @@ status-website:
   introTitle: État des services 2gather
   # La cadence annoncée est celle qui est mesurée, pas celle qui est demandée.
   # Le cron réclame cinq minutes, GitHub retarde les tâches planifiées sous
-  # charge et la médiane relevée est de vingt-quatre minutes. Annoncer cinq
-  # minutes sur une page de statut serait faux, et faux sur le seul chiffre
-  # qui borne le délai de détection.
+  # charge et en abandonne certaines : médiane de 29 minutes sur 28 relevés
+  # consécutifs, jusqu'à 84. Annoncer cinq minutes sur une page de statut
+  # serait faux, et faux sur le seul chiffre qui borne le délai de détection.
+  # Chiffre à revoir périodiquement, la charge de GitHub n'étant pas stable.
   introMessage: >-
     Disponibilité des services 2gather, mesurée depuis les runners GitHub
     Actions, donc hors de l'infrastructure surveillée. Le relevé est demandé
-    toutes les cinq minutes et GitHub le livre en pratique toutes les vingt
-    minutes environ. Chaque mesure est ajoutée à l'historique public du dépôt,
-    et une interruption ouvre une issue datée, close au rétablissement.
+    toutes les cinq minutes et GitHub le livre en pratique toutes les trente
+    minutes environ, parfois moins souvent. Une interruption plus courte que
+    cet intervalle peut donc passer inaperçue. Chaque mesure est ajoutée à
+    l'historique public du dépôt, et une interruption ouvre une issue datée,
+    close au rétablissement.
 
   # Thème aux couleurs de la marque, servi depuis assets/. Tout fichier de ce
   # répertoire est publié tel quel à la racine du site.
