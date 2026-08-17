@@ -1,20 +1,25 @@
 {
-  "background_color": "#ffffff",
-  "theme_color": "#333333",
-  "name": "Upptime",
-  "short_name": "Upptime",
+  "name": "État des services 2gather",
+  "short_name": "État 2gather",
+  "description": "État en temps réel des services 2gather, mesuré hors de leur infrastructure.",
+  "lang": "fr-FR",
   "display": "minimal-ui",
-  "start_url": "/",
+  "start_url": "/upptime/",
+  "scope": "/upptime/",
+  "background_color": "#faf4e9",
+  "theme_color": "#faf4e9",
   "icons": [
     {
       "src": "logo-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "logo-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
