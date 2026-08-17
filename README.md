@@ -11,13 +11,15 @@ est ajoutée à l'historique du dépôt, jamais réécrite.
 
 ## Ce qui est surveillé
 
-| Service                         | Ce que la sonde vérifie                               |
-| ------------------------------- | ----------------------------------------------------- |
-| API                             | le processus répond, sans toucher la base ni le cache |
-| API, accès base de données      | une lecture aboutit réellement en base                |
-| Application web événements      | la page répond                                        |
-| Application web profils         | la page répond                                        |
-| Administration (trois consoles) | la console répond                                     |
+| Service                              | Ce que la sonde vérifie                               |
+| ------------------------------------ | ----------------------------------------------------- |
+| API                                  | le processus répond, sans toucher la base ni le cache |
+| API, accès base de données           | une lecture aboutit réellement en base                |
+| Application web événements           | la page répond et rend l'interface                    |
+| Application web profils              | la page répond et rend l'interface                    |
+| Administration, production           | la console répond et rend l'interface                 |
+| Administration, événements           | la console répond et rend l'interface                 |
+| Administration, profils              | le portail d'accès répond, pas la console derrière    |
 
 **Deux sondes portent sur l'API, et c'est délibéré.** La première répond un statut constant sans
 interroger la base : elle reste verte quand PostgreSQL est tombé. La seconde lit réellement en base,
@@ -30,6 +32,19 @@ web sont affichées en clair : elles ne rendent rien qu'un visiteur ne puisse d�
 lecture en base et les trois consoles d'administration passent par des secrets de dépôt, référencés
 par leur nom dans la configuration. Leur état est public, leur adresse ne l'est pas. Upptime écrit
 le nom du secret dans `history/`, jamais sa valeur, et n'affiche aucun lien pour ces services.
+
+**Le contenu de la réponse est vérifié partout, pas seulement le code HTTP.** Upptime accepte par
+défaut tout code de 200 à 308 et suit les redirections. Sans marqueur de contenu, un service qui
+redirige vers une page d'erreur, ou qui rend une coquille vide en 200, passerait pour opérationnel.
+Chaque sonde exige donc une chaîne attendue dans le corps. Le marqueur est une marque de
+l'interface, pas un fragment de mise en page, pour ne pas virer au rouge au premier changement de
+gabarit.
+
+**Une sonde mesure moins que son nom ne le suggère, et le dit.** La console des profils est derrière
+un portail d'authentification qui répond à sa place : la sonde reçoit la page de connexion du
+portail, jamais la console. Elle vérifie que le nom résout, que TLS s'établit et que le portail
+sert la demande. La console derrière peut être tombée sans que cet état bouge. Aller plus loin
+suppose un jeton de service du portail, passé en en-tête depuis un secret de dépôt.
 
 **Les applications mobiles ne figurent pas ici.** Elles ne s'interrogent pas en HTTP et dépendent de
 l'API ci-dessus. Leur taux de sessions sans plantage se mesure avec un outil distinct.

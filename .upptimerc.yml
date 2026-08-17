@@ -37,14 +37,22 @@ sites:
     maxResponseTime: 2000
     __dangerous__body_down_if_text_missing: "pagination"
 
+  # Chaque cible vérifie aussi le contenu de la réponse. Upptime accepte par
+  # défaut les codes 200 à 308, redirections comprises, et suit celles-ci : un
+  # service qui redirigerait vers une page d'erreur, ou qui rendrait une coquille
+  # vide en 200, passerait pour opérationnel. Le marqueur est une marque de
+  # l'interface, pas un fragment de mise en page, pour ne pas virer au rouge au
+  # premier changement de gabarit.
   - name: Application web événements
     slug: application-web-evenements
     url: https://2gather.events
     maxResponseTime: 3000
+    __dangerous__body_down_if_text_missing: "2gather"
   - name: Application web profils
     slug: application-web-profils
     url: https://2gather.me
     maxResponseTime: 3000
+    __dangerous__body_down_if_text_missing: "2gather"
 
   # Les trois consoles d'administration sont surveillées par URL secrète.
   # L'état est public, l'adresse ne l'est pas : Upptime écrit le nom du
@@ -58,11 +66,25 @@ sites:
     slug: administration-production
     url: $ADMIN_APP_URL
     maxResponseTime: 2000
+    __dangerous__body_down_if_text_missing: "2gather"
   - name: Administration, événements
     slug: administration-evenements
     url: $ADMIN_EVENTS_URL
     maxResponseTime: 4000
-  - name: Administration, profils
+    __dangerous__body_down_if_text_missing: "2gather"
+
+  # Cette console est derrière un portail d'authentification qui répond à sa
+  # place : la sonde reçoit la page de connexion du portail, jamais la console.
+  # Elle mesure donc que le nom résout, que TLS s'établit et que le portail
+  # sert la demande. Elle ne dit rien de la console derrière, qui peut être
+  # tombée sans que cet état bouge. Le nom l'annonce plutôt que de laisser
+  # croire à une mesure qu'elle ne fait pas.
+  #
+  # Aucun marqueur de contenu ici : le seul disponible est celui du portail, et
+  # l'écrire dans un fichier public nommerait la protection d'un hôte tenu
+  # secret. Vérifier la console elle-même suppose un jeton de service du
+  # portail, passé en en-tête depuis un secret.
+  - name: Administration, profils (portail d'accès)
     slug: administration-profils
     url: $ADMIN_ME_URL
     maxResponseTime: 2000
