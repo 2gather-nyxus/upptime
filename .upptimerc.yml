@@ -54,29 +54,24 @@ sites:
     maxResponseTime: 3000
     __dangerous__body_down_if_text_missing: "2gather"
 
-  # Cette sonde est rouge au moment où elle est ajoutée, et c'est la raison de
-  # l'ajouter. Le domaine principal renvoie une erreur de poignée de main TLS
-  # entre le proxy et l'origine, de façon stable. C'est l'adresse que
-  # l'application web déclare comme la sienne, et celle de la politique de
-  # confidentialité qu'exigent les magasins d'applications.
-  #
-  # Elle avait été écartée au motif qu'elle compterait indisponible dès la
-  # première minute. Ce motif était mauvais : une page d'état existe pour
-  # montrer ce qui est cassé, et une panne connue qu'on ne mesure pas est une
-  # panne dont personne ne suit la résolution.
+  # Le domaine que l'application web déclare comme le sien, et sur lequel elle
+  # annonce ses pages légales. Il n'a longtemps été servi par rien, et cette
+  # sonde a été ajoutée alors qu'elle était rouge : une panne connue que
+  # personne ne mesure est une panne dont personne ne suit la résolution.
   - name: Domaine principal
     slug: domaine-principal
     url: https://2-gather.app
     maxResponseTime: 3000
 
   # Sonde distincte, et pas une redondance. Le domaine principal peut très bien
-  # répondre alors que ce fichier reste introuvable : servir l'application et
-  # servir `/.well-known/` sont deux règles nginx différentes. Or c'est ce
-  # fichier que le système d'exploitation va chercher pour décider qu'un lien
-  # partagé ouvre l'application plutôt que le navigateur. Son absence ne
-  # produit aucune erreur visible, elle dégrade silencieusement chaque lien
-  # partagé. Le fichier équivalent pour l'autre plateforme partage le même
-  # sort et la même correction.
+  # répondre alors que ce fichier reste introuvable : servir une application et
+  # servir `/.well-known/` sont deux règles différentes. Or c'est ce fichier que
+  # le système d'exploitation va chercher pour décider qu'un lien partagé ouvre
+  # l'application plutôt que le navigateur. Son absence ne produit aucune erreur
+  # visible, elle dégrade silencieusement chaque lien partagé.
+  #
+  # Cette sonde ne couvre qu'une des deux plateformes mobiles. L'autre attend
+  # son propre fichier, et son état ne se déduit pas de celui-ci.
   - name: Liens universels des applications
     slug: liens-universels
     url: https://2-gather.app/.well-known/apple-app-site-association

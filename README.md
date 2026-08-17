@@ -23,24 +23,16 @@ est ajoutée à l'historique du dépôt, jamais réécrite.
 | Administration, événements | la console répond et rend l'interface                  |
 | Administration, profils    | le portail d'accès répond, pas la console derrière     |
 
-**Le domaine principal est rouge, et ces deux sondes ont été ajoutées pour cela.** Il renvoie de
-façon stable une erreur de poignée de main TLS entre le proxy et l'origine. Ce que cela emporte
-avec lui va bien au-delà d'une page d'accueil absente :
+**Deux sondes portent sur le domaine principal, et elles ne font pas double emploi.** Le domaine
+peut répondre alors que `/.well-known/` reste introuvable : servir une application et servir ce
+répertoire sont deux règles distinctes. Une seule sonde sur la racine déclarerait résolu un
+problème qui ne le serait pas.
 
-- **Les liens partagés n'ouvrent plus les applications.** Les applications déclarent ce domaine
-  comme celui de leurs liens universels, sur les deux plateformes. Le système d'exploitation va
-  chercher un fichier sous `/.well-known/` pour l'autoriser, ne l'obtient pas, et bascule sur le
-  navigateur. Aucune erreur n'est affichée : chaque lien d'événement partagé échoue en silence.
-- **Les pages légales déclarées sont injoignables.** L'application web les annonce sur ce domaine,
-  or elles ne sont servies que sur `2gather.events`, à une autre adresse.
-
-Les deux sondes ne font pas double emploi. Le domaine peut répondre alors que `/.well-known/`
-reste introuvable, parce que servir l'application et servir ce répertoire sont deux règles
-distinctes. Une seule sonde sur la racine déclarerait le problème résolu avant qu'il le soit.
-
-Cette cible avait d'abord été écartée au motif qu'elle compterait indisponible dès la première
-minute. Le motif était mauvais : une page d'état existe pour montrer ce qui est cassé, et une panne
-connue qu'on ne mesure pas est une panne dont personne ne suit la résolution.
+Ce répertoire porte le fichier que le système d'exploitation va chercher pour autoriser un lien
+partagé à ouvrir l'application plutôt que le navigateur. Son absence ne produit aucune erreur
+visible : elle dégrade chaque lien partagé en silence, ce qui est précisément pourquoi elle mérite
+sa propre mesure. La plateforme mobile qui n'a pas encore son fichier équivalent n'est donc pas
+couverte par cette sonde, et son état ne se déduit pas de celui-ci.
 
 **Deux sondes portent sur l'API, et c'est délibéré.** La première répond un statut constant sans
 interroger la base : elle reste verte quand PostgreSQL est tombé. La seconde lit réellement en base,
