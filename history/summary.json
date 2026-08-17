@@ -72,6 +72,26 @@
     "dailyMinutesDown": {}
   },
   {
+    "name": "Domaine principal",
+    "url": "https://2-gather.app",
+    "icon": "https://icons.duckduckgo.com/ip3/2-gather.app.ico",
+    "slug": "domaine-principal",
+    "status": "down",
+    "uptime": "61.53%",
+    "uptimeDay": "61.53%",
+    "uptimeWeek": "61.53%",
+    "uptimeMonth": "61.53%",
+    "uptimeYear": "61.53%",
+    "time": 238,
+    "timeDay": 238,
+    "timeWeek": 238,
+    "timeMonth": 238,
+    "timeYear": 238,
+    "dailyMinutesDown": {
+      "2026-08-17": 0
+    }
+  },
+  {
     "name": "Administration, production",
     "url": "$ADMIN_APP_URL",
     "icon": "https://icons.duckduckgo.com/ip3/null.ico",
