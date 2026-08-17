@@ -108,7 +108,7 @@
     "dailyMinutesDown": {}
   },
   {
-    "name": "Administration, profils",
+    "name": "Administration, profils (portail d'accès)",
     "url": "$ADMIN_ME_URL",
     "icon": "https://icons.duckduckgo.com/ip3/null.ico",
     "slug": "administration-profils",
