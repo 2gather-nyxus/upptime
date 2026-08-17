@@ -77,18 +77,18 @@
     "icon": "https://icons.duckduckgo.com/ip3/2-gather.app.ico",
     "slug": "domaine-principal",
     "status": "down",
-    "uptime": "61.53%",
-    "uptimeDay": "61.53%",
-    "uptimeWeek": "61.53%",
-    "uptimeMonth": "61.53%",
-    "uptimeYear": "61.53%",
+    "uptime": "18.88%",
+    "uptimeDay": "18.88%",
+    "uptimeWeek": "18.88%",
+    "uptimeMonth": "18.88%",
+    "uptimeYear": "18.88%",
     "time": 238,
     "timeDay": 238,
     "timeWeek": 238,
     "timeMonth": 238,
     "timeYear": 238,
     "dailyMinutesDown": {
-      "2026-08-17": 0
+      "2026-08-17": 1
     }
   },
   {
