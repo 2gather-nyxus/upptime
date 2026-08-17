@@ -54,6 +54,21 @@ sites:
     maxResponseTime: 3000
     __dangerous__body_down_if_text_missing: "2gather"
 
+  # Cette sonde est rouge au moment où elle est ajoutée, et c'est la raison de
+  # l'ajouter. Le domaine principal renvoie une erreur de poignée de main TLS
+  # entre le proxy et l'origine, de façon stable. C'est l'adresse que
+  # l'application web déclare comme la sienne, et celle de la politique de
+  # confidentialité qu'exigent les magasins d'applications.
+  #
+  # Elle avait été écartée au motif qu'elle compterait indisponible dès la
+  # première minute. Ce motif était mauvais : une page d'état existe pour
+  # montrer ce qui est cassé, et une panne connue qu'on ne mesure pas est une
+  # panne dont personne ne suit la résolution.
+  - name: Domaine principal
+    slug: domaine-principal
+    url: https://2-gather.app
+    maxResponseTime: 3000
+
   # Les trois consoles d'administration sont surveillées par URL secrète.
   # L'état est public, l'adresse ne l'est pas : Upptime écrit le nom du
   # secret dans history/ et n'affiche aucun lien sur la page de statut.

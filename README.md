@@ -15,11 +15,22 @@ est ajoutée à l'historique du dépôt, jamais réécrite.
 | -------------------------- | ----------------------------------------------------- |
 | API                        | le processus répond, sans toucher la base ni le cache |
 | API, accès base de données | une lecture aboutit réellement en base                |
+| Domaine principal          | le domaine que l'application déclare comme le sien     |
 | Application web événements | la page répond et rend l'interface                    |
 | Application web profils    | la page répond et rend l'interface                    |
 | Administration, production | la console répond et rend l'interface                 |
 | Administration, événements | la console répond et rend l'interface                 |
 | Administration, profils    | le portail d'accès répond, pas la console derrière    |
+
+**Le domaine principal est rouge, et cette sonde a été ajoutée pour cela.** Il renvoie de façon
+stable une erreur de poignée de main TLS entre le proxy et l'origine. C'est l'adresse que
+l'application web déclare comme la sienne, et celle de la politique de confidentialité et des
+conditions d'utilisation, deux pages qu'un magasin d'applications exige joignables. Aucune n'est
+servie ailleurs.
+
+Cette cible avait d'abord été écartée au motif qu'elle compterait indisponible dès la première
+minute. Le motif était mauvais : une page d'état existe pour montrer ce qui est cassé, et une panne
+connue qu'on ne mesure pas est une panne dont personne ne suit la résolution.
 
 **Deux sondes portent sur l'API, et c'est délibéré.** La première répond un statut constant sans
 interroger la base : elle reste verte quand PostgreSQL est tombé. La seconde lit réellement en base,
