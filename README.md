@@ -66,25 +66,41 @@ efface justement les incidents courts, les plus fréquents.
 
 ## Le délai de détection, mesuré
 
-**Le relevé est demandé toutes les cinq minutes. Il ne l'est pas.** Sur les douze premières
-exécutions planifiées, l'intervalle réel va de 16 à 34 minutes, avec une médiane de 24. GitHub
-retarde les tâches planifiées sous charge et le documente : « le début de chaque heure fait
-partie des périodes de forte charge, et certaines exécutions en file peuvent être abandonnées ».
-Aucun réglage du dépôt ne change cela.
+**Le relevé est demandé toutes les cinq minutes. Il ne l'est pas.** Sur 28 exécutions planifiées
+consécutives, mesurées le 2026-08-17 sur seize heures, l'intervalle réel va de 16 à 84 minutes,
+avec une médiane de 29 et une moyenne de 36. GitHub retarde les tâches planifiées sous charge et
+le documente : « le début de chaque heure fait partie des périodes de forte charge, et certaines
+exécutions en file peuvent être abandonnées ». Aucun réglage du dépôt ne change cela.
+
+Un écart de 84 minutes ne s'explique pas par un retard seul : c'est un déclenchement abandonné,
+le second comportement décrit par la documentation. Ces mesures doivent être refaites
+périodiquement, la charge de GitHub n'étant pas une constante.
 
 La conséquence se dit en une phrase : **une interruption plus courte que l'intervalle peut ne
-jamais être vue.** Un service tombé huit minutes a de bonnes chances de ne laisser aucune trace
+jamais être vue.** Un service tombé vingt minutes a de bonnes chances de ne laisser aucune trace
 ici. Ce que ce moniteur mesure de façon fiable, ce sont les pannes qui durent, pas les
-micro-coupures.
+micro-coupures. Un chiffre de disponibilité mensuel calculé sur cette base est donc un plancher,
+jamais une garantie.
 
 Deux choses ont été faites avec ce qui est sous contrôle. Les crons sont décalés du début d'heure,
 ce que la documentation GitHub recommande explicitement pour réduire le retard. Et ils évitent la
 grille des relevés, toutes les tâches Upptime partageant un même groupe de concurrence où deux
 déclenchements simultanés se mettent en file.
 
-Descendre réellement sous les cinq minutes suppose de sortir du planificateur de GitHub : un
-déclencheur externe appelant `repository_dispatch` avec le type `uptime`, depuis un ordonnanceur
-qui, lui, tient la cadence.
+Descendre réellement sous les cinq minutes suppose de sortir du planificateur de GitHub. Les
+workflows acceptent déjà `repository_dispatch`, il ne manque qu'un ordonnanceur qui tienne la
+cadence, sur une machine déjà en service :
+
+```bash
+curl -X POST https://api.github.com/repos/2gather-nyxus/upptime/dispatches \
+  -H "Authorization: Bearer $GH_PAT" \
+  -H "Accept: application/vnd.github+json" \
+  -d '{"event_type":"uptime"}'
+```
+
+Une entrée cron toutes les cinq minutes suffit. Le jeton demande la portée `contents: write` sur
+ce dépôt uniquement. À faire seulement si le délai de détection actuel est jugé trop long : cela
+introduit une dépendance à une machine, ce que le tout-GitHub évitait.
 
 ## Les workflows sont durcis à la main
 
