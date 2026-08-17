@@ -186,16 +186,40 @@ statut l'annonce avant qu'elle commence.
 
 ### Passer sur un domaine propre
 
-La page est servie sur `2gather-nyxus.github.io/upptime`. Pour `status.2gather.events`, ajouter la
-clé `cname` sous `status-website` dans `.upptimerc.yml`, puis créer l'enregistrement DNS
-correspondant :
+La page est servie sur `2gather-nyxus.github.io/upptime`. La bascule vers un sous-domaine demande
+cinq changements coordonnés, dans cet ordre. En faire un seul casse la page.
+
+**1. Créer l'enregistrement DNS d'abord.** Poser le `cname` avant que le nom résolve rend la page
+inaccessible dans l'intervalle. La cible ne contient jamais le nom du dépôt, la documentation
+GitHub est explicite là-dessus.
 
 ```
-status  CNAME  2gather-nyxus.github.io
+status  CNAME  2gather-nyxus.github.io.
 ```
 
-Poser le `cname` avant que le DNS ne résolve rend la page inaccessible dans l'intervalle, donc créer
-l'enregistrement d'abord. Penser à mettre à jour `og:url` dans `metaTags` au même moment.
+**2. Attendre que ça résolve**, puis vérifier :
+
+```bash
+dig +short status.2gather.events   # doit rendre 2gather-nyxus.github.io.
+```
+
+**3. Dans `.upptimerc.yml`, sous `status-website`** : ajouter `cname: status.2gather.events` et
+**supprimer `baseUrl`**. Les deux se concatènent dans le code de génération,
+`config.path = https://{cname}{baseUrl}` : garder `baseUrl` produirait des liens internes vers
+`status.2gather.events/upptime`, qui n'existe pas. `baseUrl` pilote aussi le `--basepath` de
+l'export.
+
+**4. Mettre à jour les trois URL absolues** qui pointent encore vers l'ancien domaine : `themeUrl`
+dans `.upptimerc.yml`, `og:url` dans `customHeadHtml`, et dans `assets/manifest.json` les clés
+`start_url` et `scope`, qui passent de `/upptime/` à `/`.
+
+**5. Lancer `Static Site CI`.** La tâche écrit le fichier `CNAME` dans la publication, ce qui règle
+le domaine côté GitHub Pages. Vérifier ensuite que le certificat est émis, dans les réglages Pages
+du dépôt, et cocher *Enforce HTTPS*.
+
+Un enregistrement DNS générique sur le domaine parent rendrait ce sous-domaine vulnérable à une
+reprise par un tiers. La documentation GitHub le dit sans détour : ces enregistrements exposent à
+un risque immédiat, que la vérification de domaine ne couvre pas.
 
 ## Licences
 
