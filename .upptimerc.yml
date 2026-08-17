@@ -171,7 +171,11 @@ i18n:
   up: 🟩 Opérationnel
   degraded: 🟨 Dégradé
   down: 🟥 Indisponible
-  ms: ms
+  # Espace inclus dans la valeur : Summary.svelte et summary.ts concatenent
+  # sans separateur, `{summary.time}{config.i18n.ms}`, ce qui rendait "471ms"
+  # sur la page d'historique alors que l'accueil affichait "476 ms". En
+  # francais l'unite se separe du nombre.
+  ms: " ms"
   loading: Chargement
   navGitHub: GitHub
   footer: Cette page est [open source]($REPO), propulsée par [Upptime](https://upptime.js.org)
