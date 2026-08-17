@@ -69,6 +69,19 @@ sites:
     url: https://2-gather.app
     maxResponseTime: 3000
 
+  # Sonde distincte, et pas une redondance. Le domaine principal peut très bien
+  # répondre alors que ce fichier reste introuvable : servir l'application et
+  # servir `/.well-known/` sont deux règles nginx différentes. Or c'est ce
+  # fichier que le système d'exploitation va chercher pour décider qu'un lien
+  # partagé ouvre l'application plutôt que le navigateur. Son absence ne
+  # produit aucune erreur visible, elle dégrade silencieusement chaque lien
+  # partagé. Le fichier équivalent pour l'autre plateforme partage le même
+  # sort et la même correction.
+  - name: Liens universels des applications
+    slug: liens-universels
+    url: https://2-gather.app/.well-known/apple-app-site-association
+    maxResponseTime: 3000
+
   # Les trois consoles d'administration sont surveillées par URL secrète.
   # L'état est public, l'adresse ne l'est pas : Upptime écrit le nom du
   # secret dans history/ et n'affiche aucun lien sur la page de statut.
