@@ -216,7 +216,7 @@ dans `.upptimerc.yml`, `og:url` dans `customHeadHtml`, et dans `assets/manifest.
 
 **5. Lancer `Static Site CI`.** La tâche écrit le fichier `CNAME` dans la publication, ce qui règle
 le domaine côté GitHub Pages. Vérifier ensuite que le certificat est émis, dans les réglages Pages
-du dépôt, et cocher *Enforce HTTPS*.
+du dépôt, et cocher _Enforce HTTPS_.
 
 Un enregistrement DNS générique sur le domaine parent rendrait ce sous-domaine vulnérable à une
 reprise par un tiers. La documentation GitHub le dit sans détour : ces enregistrements exposent à
