@@ -1,5 +1,5 @@
-owner: 2gather-nyxus
-repo: upptime
+owner: 2gather-platform
+repo: 2gather-status
 
 # Liste blanche explicite des secrets passés aux workflows. Sans cette clé,
 # Upptime bascule en mode automatique et expose un contexte de secrets bien
