@@ -323,3 +323,10 @@ assignees:
 skipDescriptionUpdate: true
 skipTopicsUpdate: true
 skipHomepageUpdate: true
+
+# Les relevés sont commités sous le compte qui exploite le dépôt, pas sous
+# l'identité générique d'Upptime. Les messages restent ceux d'Upptime : le
+# calcul de disponibilité et des temps de réponse les relit tels quels.
+commitMessages:
+  commitAuthorName: Amaury Poltavtseef
+  commitAuthorEmail: 34680117+Asteerix@users.noreply.github.com
