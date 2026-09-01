@@ -6,8 +6,8 @@ Ce dépôt mesure la disponibilité des services 2gather. Les points d'entrée s
 les runners GitHub Actions, donc depuis l'extérieur de l'infrastructure surveillée. Chaque mesure
 est ajoutée à l'historique du dépôt, jamais réécrite.
 
-[Page de statut](https://2gather-nyxus.github.io/upptime/) ·
-[Historique des relevés](https://github.com/2gather-nyxus/upptime/commits/main)
+[Page de statut](https://2gather-platform.github.io/2gather-status/) ·
+[Historique des relevés](https://github.com/2gather-platform/2gather-status/commits/main)
 
 ## Ce qui est surveillé
 
@@ -105,7 +105,7 @@ workflows acceptent déjà `repository_dispatch`, il ne manque qu'un ordonnanceu
 cadence, sur une machine déjà en service :
 
 ```bash
-curl -X POST https://api.github.com/repos/2gather-nyxus/upptime/dispatches \
+curl -X POST https://api.github.com/repos/2gather-platform/2gather-status/dispatches \
   -H "Authorization: Bearer $GH_PAT" \
   -H "Accept: application/vnd.github+json" \
   -d '{"event_type":"uptime"}'
@@ -153,7 +153,7 @@ grep -L "timeout-minutes" .github/workflows/*.yml   # doit ne rien lister
 
 <!--end: status pages-->
 
-[Voir la page de statut](https://2gather-nyxus.github.io/upptime/)
+[Voir la page de statut](https://2gather-platform.github.io/2gather-status/)
 
 ## Exploitation
 
@@ -189,7 +189,7 @@ la valeur devient le caractère `-`, car `--body` prend la valeur telle quelle e
 l'entrée standard demande d'omettre le drapeau.
 
 ```bash
-printf '%s' 'https://exemple' | gh secret set NOM --repo 2gather-nyxus/upptime
+printf '%s' 'https://exemple' | gh secret set NOM --repo 2gather-platform/2gather-status
 ```
 
 Après avoir posé ou changé un secret, déclencher `Uptime CI` à la main et vérifier que le service
@@ -202,7 +202,7 @@ Trois canaux, du plus immédiat au plus complet.
 | Canal               | Ce qu'il porte              | Comment                                                                           |
 | ------------------- | --------------------------- | --------------------------------------------------------------------------------- |
 | Notification GitHub | les incidents, par courriel | suivre ce dépôt, ou être dans `assignees`                                         |
-| Flux Atom           | chaque relevé               | [`commits/main.atom`](https://github.com/2gather-nyxus/upptime/commits/main.atom) |
+| Flux Atom           | chaque relevé               | [`commits/main.atom`](https://github.com/2gather-platform/2gather-status/commits/main.atom) |
 | Webhook temps réel  | les incidents, poussés      | secrets du fournisseur, voir ci-dessous                                           |
 
 Le flux Atom est volumineux par construction : il porte chaque relevé, pas seulement les incidents.
@@ -218,7 +218,7 @@ statut l'annonce avant qu'elle commence.
 
 ### Passer sur un domaine propre
 
-La page est servie sur `2gather-nyxus.github.io/upptime`. La bascule vers un sous-domaine demande
+La page est servie sur `2gather-platform.github.io/2gather-status`. La bascule vers un sous-domaine demande
 cinq changements coordonnés, dans cet ordre. En faire un seul casse la page.
 
 **1. Créer l'enregistrement DNS d'abord.** Poser le `cname` avant que le nom résolve rend la page
@@ -226,13 +226,13 @@ inaccessible dans l'intervalle. La cible ne contient jamais le nom du dépôt, l
 GitHub est explicite là-dessus.
 
 ```
-status  CNAME  2gather-nyxus.github.io.
+status  CNAME  2gather-platform.github.io.
 ```
 
 **2. Attendre que ça résolve**, puis vérifier :
 
 ```bash
-dig +short status.2gather.events   # doit rendre 2gather-nyxus.github.io.
+dig +short status.2gather.events   # doit rendre 2gather-platform.github.io.
 ```
 
 **3. Dans `.upptimerc.yml`, sous `status-website`** : ajouter `cname: status.2gather.events` et
